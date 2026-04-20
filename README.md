@@ -12,16 +12,19 @@ A lightweight multi-button handler library for embedded systems, supports single
 
 ## Events
 
-| Event                              | Description                     |
-|------------------------------------|---------------------------------|
-| `BTN_EVENT_PRESS`                  | Button pressed down             |
-| `BTN_EVENT_RELEASE`                | Button released                 |
-| `BTN_EVENT_SINGLE_CLICK`           | Single click completed          |
-| `BTN_EVENT_DOUBLE_CLICK`           | Double click completed          |
-| `BTN_EVENT_TRIPLE_CLICK`           | Triple click completed          |
-| `BTN_EVENT_LONG_PRESS_STAGE_1`     | Long press stage 1 completed    |
-| `BTN_EVENT_LONG_PRESS_STAGE_2`     | Long press stage 2 completed    |
-| `BTN_EVENT_LONG_PRESS_STAGE_3`     | Long press stage 3 completed    |
+| Event                                     | Description                       |
+|-------------------------------------------|-----------------------------------|
+| `BTN_EVENT_PRESS`                         | Button pressed down               |
+| `BTN_EVENT_RELEASE`                       | Button released                   |
+| `BTN_EVENT_SINGLE_CLICK`                  | Single click completed            |
+| `BTN_EVENT_DOUBLE_CLICK`                  | Double click completed            |
+| `BTN_EVENT_TRIPLE_CLICK`                  | Triple click completed            |
+| `BTN_EVENT_LONG_PRESS_STAGE_1`            | Long press stage 1 completed      |
+| `BTN_EVENT_LONG_PRESS_STAGE_2`            | Long press stage 2 completed      |
+| `BTN_EVENT_LONG_PRESS_STAGE_3`            | Long press stage 3 completed      |
+| `BTN_EVENT_LONG_PRESS_STAGE_1_Start`      | Long press stage 1 start          |
+| `BTN_EVENT_LONG_PRESS_STAGE_2_Start`      | Long press stage 2 start          |
+| `BTN_EVENT_LONG_PRESS_STAGE_3_Start`      | Long press stage 3 start          |
 
 ## Usage
 
