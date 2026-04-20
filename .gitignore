@@ -1,0 +1,12 @@
+# Object files
+*.o
+
+# Executables
+*.exe
+
+# Build artifacts
+*.out
+*.elf
+*.bin
+*.hex
+*.map
