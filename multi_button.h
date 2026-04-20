@@ -5,10 +5,10 @@
 
 #define TICKS_INTERVAL 5                                    // ms per tick, adjust as needed
 #define DEBOUNCE_TICKS 3                                    // (0~7) Number of ticks for debouncing (e.g., 3 ticks = 15ms)
-#define LONG_PRESS_STAGE_1_TICKS (1000/TICKS_INTERVAL)      // Time threshold for long press stage 1 (e.g., 1 second)
-#define LONG_PRESS_STAGE_2_TICKS (3000/TICKS_INTERVAL)      // Time threshold for long press stage 2 (e.g., 3 seconds)
-#define LONG_PRESS_STAGE_3_TICKS (5000/TICKS_INTERVAL)      // Time threshold for long press stage 3 (e.g., 5 seconds)
-#define REPEAT_PRESS_TICKS (300/TICKS_INTERVAL)             // Time threshold to distinguish between single/double click
+#define LONG_PRESS_STAGE_1_TICKS (1000/TICKS_INTERVAL)      // Time threshold for long press stage 1 (e.g., 1 second), usually for power on/off
+#define LONG_PRESS_STAGE_2_TICKS (3000/TICKS_INTERVAL)      // Time threshold for long press stage 2 (e.g., 3 seconds), usually for config
+#define LONG_PRESS_STAGE_3_TICKS (10000/TICKS_INTERVAL)     // Time threshold for long press stage 3 (e.g., 10 seconds), usually for reset
+#define REPEAT_PRESS_TICKS (200/TICKS_INTERVAL)             // Time threshold to distinguish between single/double click
 #define IDLE_TICKS (1000/TICKS_INTERVAL)                    // Time threshold to reset to idle state
 #define REPEAT_PRESS_MAX_NUM 15                             // Maximum number of presses to count for repeat press events
 
@@ -30,8 +30,11 @@ typedef enum {
     BTN_EVENT_DOUBLE_CLICK,                 // double click completed
     BTN_EVENT_TRIPLE_CLICK,                 // triple click completed
     BTN_EVENT_LONG_PRESS_STAGE_1,           // long press stage 1 completed
+    BTN_EVENT_LONG_PRESS_STAGE_1_START,     // long press stage 1 started
     BTN_EVENT_LONG_PRESS_STAGE_2,           // long press stage 2 completed
+    BTN_EVENT_LONG_PRESS_STAGE_2_START,     // long press stage 2 started
     BTN_EVENT_LONG_PRESS_STAGE_3,           // long press stage 3 completed
+    BTN_EVENT_LONG_PRESS_STAGE_3_START,     // long press stage 3 started
     BTN_EVENT_COUNT,                        // total number of events
     BTN_EVENT_NONE                          // no event, button idle
 } ButtonEvent;
@@ -39,7 +42,7 @@ typedef enum {
 struct _Button {
     uint8_t button_id;                              // ID of the button, can be used to identify different buttons
     uint8_t active_level;                           // GPIO level that indicates the button is pressed
-    uint8_t (*read_level)(uint8_t GPIO_PIN);        // Function pointer to read the button level
+    uint8_t (*read_level)(uint8_t button_id);       // Function pointer to read the button level
     BtnCallback cb[BTN_EVENT_COUNT];                // Callback function for button events
     uint8_t current_level;                          // Current button level
     uint16_t ticks;                                 // Counter for timing button events
@@ -50,7 +53,7 @@ struct _Button {
     Button *next;                                   // Pointer to the next button in the linked list
 };
 
-void Button_Init(Button* handle, uint8_t button_id, uint8_t active_level, uint8_t (*read_level)(uint8_t GPIO_PIN));
+void Button_Init(Button* handle, uint8_t button_id, uint8_t active_level, uint8_t (*read_level)(uint8_t button_id));
 void Button_Attach(Button* handle, ButtonEvent bv, BtnCallback cb);
 void Button_Detach(Button* handle, ButtonEvent bv);
 int Button_Start(Button* handle);

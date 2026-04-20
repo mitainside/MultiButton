@@ -74,6 +74,30 @@ static void log_long_press_stage_3(Button* btn){
     }
 }
 
+static void log_long_press_stage_1_Start(Button* btn){
+    if (btn) {
+        printf("Long Press Stage 1 Start (id=%u)\n", btn->button_id);
+    } else {
+        printf("Long Press Stage 1 Start\n");
+    }
+}
+
+static void log_long_press_stage_2_Start(Button* btn){
+    if (btn) {
+        printf("Long Press Stage 2 Start (id=%u)\n", btn->button_id);
+    } else {
+        printf("Long Press Stage 2 Start\n");
+    }
+}
+
+static void log_long_press_stage_3_Start(Button* btn){
+    if (btn) {
+        printf("Long Press Stage 3 Start (id=%u)\n", btn->button_id);
+    } else {
+        printf("Long Press Stage 3 Start\n");
+    }
+}
+
 static Button btn;
 
 static void Setup_Button(){
@@ -86,6 +110,9 @@ static void Setup_Button(){
     Button_Attach(&btn, BTN_EVENT_LONG_PRESS_STAGE_1, log_long_press_stage_1);
     Button_Attach(&btn, BTN_EVENT_LONG_PRESS_STAGE_2, log_long_press_stage_2);
     Button_Attach(&btn, BTN_EVENT_LONG_PRESS_STAGE_3, log_long_press_stage_3);
+    Button_Attach(&btn, BTN_EVENT_LONG_PRESS_STAGE_1_START, log_long_press_stage_1_Start);
+    Button_Attach(&btn, BTN_EVENT_LONG_PRESS_STAGE_2_START, log_long_press_stage_2_Start);
+    Button_Attach(&btn, BTN_EVENT_LONG_PRESS_STAGE_3_START, log_long_press_stage_3_Start);
     /* register and start the button */
     if (Button_Start(&btn) != 0) {
         printf("Button_Start failed\n");
@@ -128,21 +155,21 @@ static int test_long_press(void)
 {
     Setup_Button();
 
-    /* Press for ~3.5s (700 ticks), then release */
+    /* Press for ~700 ticks, then release */
     mock_gpio_value = 1;
     tick_n(DEBOUNCE_TICKS + LONG_PRESS_STAGE_2_TICKS + 100);
 
     mock_gpio_value = 0;
     tick_n(DEBOUNCE_TICKS + 300 + 10);  /* wait for timeout */
 
-    /* Press for ~1.5s, then release */
+    /* Press for ~300 ticks, then release */
     mock_gpio_value = 1;
     tick_n(DEBOUNCE_TICKS + LONG_PRESS_STAGE_1_TICKS + 100);
 
     mock_gpio_value = 0;
     tick_n(DEBOUNCE_TICKS + 300 + 10);  /* wait for timeout */
 
-    /* Press for ~5.5s, then release */
+    /* Press for ~2100 ticks, then release */
     mock_gpio_value = 1;
     tick_n(DEBOUNCE_TICKS + LONG_PRESS_STAGE_3_TICKS + 100);
 
@@ -176,7 +203,7 @@ static int test_double_click(void)
 
 int main(){
     printf("Running tests\n");
-    int res = test_double_click();
+    int res = test_long_press();
     printf("Test finished (code=%d)\n", res);
     return res;
 }

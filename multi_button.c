@@ -11,7 +11,7 @@ Button* header = NULL;
  * @param active_level Active level of the button (0 or 1)
  * @param read_level Function pointer to read the GPIO level of the button
  */
-void Button_Init(Button* handle, uint8_t button_id, uint8_t active_level, uint8_t (*read_level)(uint8_t GPIO_PIN)) {
+void Button_Init(Button* handle, uint8_t button_id, uint8_t active_level, uint8_t (*read_level)(uint8_t button_id)) {
     if (handle == NULL) {
         return;
     }
@@ -62,6 +62,17 @@ void Button_Detach(Button* handle, ButtonEvent bv) {
  */
 static inline uint8_t Read_GPIO_Level(Button* handle) {
     return handle->read_level(handle->button_id);
+}
+
+/**
+ * @brief Get the current event of a button
+ * 
+ * @param handle Pointer to the button instance
+ * @return ButtonEvent Current button event
+ */
+static inline ButtonEvent Button_GetEvent(Button* handle){
+    if (handle == NULL) return BTN_EVENT_NONE;
+    return handle->event;
 }
 
 /**
@@ -169,6 +180,20 @@ static void Button_Handler(Button* handle) {
                 SetEvent_TriggerCallback(handle, BTN_EVENT_LONG_PRESS_STAGE_1);
             }
             handle->state = BTN_STATE_IDLE;
+        } else {
+            if (handle->ticks >= LONG_PRESS_STAGE_3_TICKS) {
+                if (Button_GetEvent(handle) != BTN_EVENT_LONG_PRESS_STAGE_3_START) {
+                    SetEvent_TriggerCallback(handle, BTN_EVENT_LONG_PRESS_STAGE_3_START);
+                }
+            } else if (handle->ticks >= LONG_PRESS_STAGE_2_TICKS) {
+                if (Button_GetEvent(handle) != BTN_EVENT_LONG_PRESS_STAGE_2_START) {
+                    SetEvent_TriggerCallback(handle, BTN_EVENT_LONG_PRESS_STAGE_2_START);
+                }
+            } else if (handle->ticks >= LONG_PRESS_STAGE_1_TICKS) {
+                if (Button_GetEvent(handle) != BTN_EVENT_LONG_PRESS_STAGE_1_START) {
+                    SetEvent_TriggerCallback(handle, BTN_EVENT_LONG_PRESS_STAGE_1_START);
+                }
+            }
         }
         break;
     default:
